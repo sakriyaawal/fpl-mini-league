@@ -1,6 +1,12 @@
 const API_BASE =
     "https://fpl-api-proxy.sakriyaawal.workers.dev/api";
 
+const LEAGUE_ID = 164381;
+
+
+// ==========================================
+// FETCH JSON
+// ==========================================
 
 async function fetchJSON(endpoint) {
 
@@ -31,35 +37,138 @@ async function fetchJSON(endpoint) {
 }
 
 
-// Test FPL API connection
-async function testAPI() {
+// ==========================================
+// TABLE 1
+// OVERALL MINI-LEAGUE RANKING
+// ==========================================
 
-    const status =
-        document.getElementById("status");
+async function loadOverallRanking() {
 
-    status.textContent =
-        "Loading FPL data...";
-
-
-    const data = await fetchJSON(
-        "/leagues-classic/164381/standings/"
+    const standings = await fetchJSON(
+        `/leagues-classic/${LEAGUE_ID}/standings/?page_standings=1`
     );
 
 
-    if (data) {
+    if (!standings) {
 
-        status.textContent =
-            "FPL API connection successful!";
+        document.getElementById(
+            "overall-table"
+        ).innerHTML = `
+            <tr>
+                <td>
+                    Could not fetch mini-league standings.
+                </td>
+            </tr>
+        `;
 
-        console.log(data);
-
-    } else {
-
-        status.textContent =
-            "FPL API connection failed.";
-
+        return;
     }
+
+
+    const results =
+        standings.standings?.results || [];
+
+
+    if (results.length === 0) {
+
+        document.getElementById(
+            "overall-table"
+        ).innerHTML = `
+            <tr>
+                <td>
+                    No completed gameweek standings
+                    are available yet.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    // Equivalent to the Python DataFrame
+
+    const overallData = results.map(manager => ({
+
+        Rank:
+            manager.rank,
+
+        Team:
+            manager.entry_name,
+
+        Manager:
+            manager.player_name,
+
+        "Total Points":
+            manager.total
+
+    }));
+
+
+    // Sort by Rank
+
+    overallData.sort(
+        (a, b) => a.Rank - b.Rank
+    );
+
+
+    // ==========================================
+    // CREATE HTML TABLE
+    // ==========================================
+
+    const table =
+        document.getElementById(
+            "overall-table"
+        );
+
+
+    table.innerHTML = `
+
+        <thead>
+
+            <tr>
+                <th>Rank</th>
+                <th>Team</th>
+                <th>Manager</th>
+                <th>Total Points</th>
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            ${overallData.map(row => `
+
+                <tr>
+
+                    <td>
+                        ${row.Rank}
+                    </td>
+
+                    <td>
+                        ${row.Team}
+                    </td>
+
+                    <td>
+                        ${row.Manager}
+                    </td>
+
+                    <td>
+                        ${row["Total Points"]}
+                    </td>
+
+                </tr>
+
+            `).join("")}
+
+        </tbody>
+    `;
 }
 
 
-testAPI();
+// ==========================================
+// START WEBSITE
+// ==========================================
+
+loadOverallRanking();
