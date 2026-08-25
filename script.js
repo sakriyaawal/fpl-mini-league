@@ -34,23 +34,30 @@ async function fetchJSON(endpoint) {
 // Test FPL API connection
 async function testAPI() {
 
+    const status =
+        document.getElementById("status");
+
+    status.textContent =
+        "Loading FPL data...";
+
+
     const data = await fetchJSON(
         "/leagues-classic/164381/standings/"
     );
 
+
     if (data) {
 
-        console.log(
-            "FPL API connection successful!"
-        );
+        status.textContent =
+            "FPL API connection successful!";
 
         console.log(data);
 
     } else {
 
-        console.error(
-            "FPL API connection failed."
-        );
+        status.textContent =
+            "FPL API connection failed.";
+
     }
 }
 
