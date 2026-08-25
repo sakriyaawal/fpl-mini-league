@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -13,15 +11,76 @@
 
     <title>FPL Mini League</title>
 
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <h1>FPL Mini League</h1>
+    <header>
+        <h1>FPL Mini League</h1>
+        <p>League ID: 164381</p>
+    </header>
 
-    <p id="status">
-        Connecting to FPL API...
-    </p>
+
+    <main>
+
+        <!-- TABLE 1 -->
+        <section>
+            <h2>Overall Mini-League Ranking</h2>
+
+            <div class="table-container">
+                <table id="overall-table">
+                </table>
+            </div>
+        </section>
+
+
+        <!-- TABLE 2 -->
+        <section>
+            <h2>Gameweek Net Points</h2>
+
+            <div class="table-container">
+                <table id="net-points-table">
+                </table>
+            </div>
+        </section>
+
+
+        <!-- TABLE 3 -->
+        <section>
+
+            <h2 id="current-gw-title">
+                Current Gameweek
+            </h2>
+
+            <div class="table-container">
+                <table id="current-gw-table">
+                </table>
+            </div>
+
+        </section>
+
+
+        <!-- TABLE 4 -->
+        <section>
+
+            <h2>Gameweek Winners</h2>
+
+            <div class="table-container">
+                <table id="winner-table">
+                </table>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>
+            Data from Fantasy Premier League
+        </p>
+    </footer>
 
 
     <script src="script.js"></script>
